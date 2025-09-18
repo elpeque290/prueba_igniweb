@@ -1,64 +1,58 @@
-CryptoInvestment
+CryptoInvestment – Resumen breve (para README)
 
-SPA en Laravel + JS que consulta CoinMarketCap, persiste en SQLite y muestra cotizaciones + histórico (Chart.js).
+Qué es
 
-🚀 Arranque rápido
+SPA en Laravel + JS.
+
+Consulta CoinMarketCap (CMC), guarda en SQLite y muestra cotizaciones + histórico (Chart.js).
+
+Arranque rápido
+
 composer install
+
 cp .env.example .env
+
 php artisan key:generate
 
-.env (ejemplo con SQLite + CoinMarketCap)
+.env mínimo (ajusta rutas/keys)
 APP_URL=http://127.0.0.1:8000
+
 APP_DEBUG=true
-
 DB_CONNECTION=sqlite
-# ⬇️ Ruta ABSOLUTA en Windows:
 DB_DATABASE=C:\Users\TU_USUARIO\Desktop\ss\cryptoinvestment\database\database.sqlite
-
 CMC_API_KEY=TU_API_KEY_DE_CMC
 
+Base de datos
 
-Crea el archivo de BD (vacío):
+Crear archivo vacío: database/database.sqlite
 
-Windows: type NUL > database\database.sqlite
+Migrar: php artisan migrate
 
-Linux/Mac: touch database/database.sqlite
+Ejecutar
 
-php artisan migrate
 php artisan serve --host=127.0.0.1 --port=8000
-# Abre http://127.0.0.1:8000
 
-🔌 Endpoints
+Abrir: http://127.0.0.1:8000
 
-Ping
-GET /api/ping → { "pong": true }
+Endpoints
 
-Cotizaciones
-GET /api/quotes?symbols=BTC,ETH,SOL
+Cotizaciones: GET /api/quotes?symbols=BTC,ETH,SOL
 
-Histórico por símbolo
-GET /api/history?symbol=BTC&from=YYYY-MM-DD&to=YYYY-MM-DD
-(acepta DD/MM/YYYY; si no envías fechas, devuelve todo)
+Histórico: GET /api/history?symbol=BTC&from=YYYY-MM-DD&to=YYYY-MM-DD
 
-🖥️ UI (SPA)
+from/to también aceptan dd/mm/yyyy
 
-Watchlist editable (BTC/ETH por defecto).
+Pruebas rápidas
+PowerShell:
+Invoke-RestMethod "http://127.0.0.1:8000/api/quotes?symbols=BTC,ETH,SOL
+" | ConvertTo-Json -Depth 5
+Invoke-RestMethod "http://127.0.0.1:8000/api/history?symbol=BTC&from=2025-09-10&to=2025-09-18
+"
 
-Tabla con precio, %1h, %24h, volumen.
+UI (uso)
 
-Haz clic en una fila para graficar el histórico.
+Agrega símbolos (ej: SOL) y presiona “Agregar”.
 
-Filtro From/To y botón Aplicar.
+Click en una fila para graficar.
 
-Auto-refresh de cotizaciones cada 15s.
-
-🧪 Pruebas rápidas (PowerShell/Postman)
-Invoke-RestMethod "http://127.0.0.1:8000/api/quotes?symbols=BTC,ETH" | ConvertTo-Json -Depth 5
-Invoke-RestMethod "http://127.0.0.1:8000/api/history?symbol=BTC&from=2025-09-18&to=2025-09-18"
-
-🛠️ Troubleshooting
-
-404 en /api/ → php artisan route:list --path=api
-Si no salen rutas: php artisan route:clear && php artisan optimize:clear.
-
-500 en /api/quotes → revisa CMC_API_KEY y php -m | findstr /i curl.
+Filtra por fechas y “Aplicar”.
